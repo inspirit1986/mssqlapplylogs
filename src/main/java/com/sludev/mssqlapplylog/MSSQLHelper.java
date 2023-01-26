@@ -81,14 +81,14 @@ public final class MSSQLHelper
      * @param logPath
      * @param sqlProcessUser Optionally, give this user file-system permissions.  So SQL Server can RESTORE.
      * @param sqlDb The name of the database to restore.
-     * @param conn  Open connection
      * @param standbyLog Path to standby Log file
+     * @param conn  Open connection
      * @throws SQLException 
      */
     public static void restoreLog(final Path logPath, 
                                     final String sqlProcessUser,
                                     final String sqlDb,
-                                    final Path standbyLog,
+                                    final String standbyLog,
                                     final Connection conn) throws SQLException
                                     
     {
@@ -113,7 +113,7 @@ public final class MSSQLHelper
 
         String strDevice = logPath.toAbsolutePath().toString();
 
-        String strStandbyLog = standbyLog.toAbsolutePath().toString();
+        String strStandbyLog = standbyLog;
 
         String query = String.format("RESTORE LOG %s FROM DISK='%s' WITH STANDBY='%s'",
                 sqlDb, strDevice, strStandbyLog);
