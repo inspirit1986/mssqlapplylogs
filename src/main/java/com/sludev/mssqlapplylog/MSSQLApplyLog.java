@@ -80,7 +80,7 @@ public final class MSSQLApplyLog implements Callable<Integer>
         String fullBackupPatternStr = config.getFullBackupPatternStr();
         String logBackupPatternStr = config.getLogBackupPatternStr();
         String logBackupDatePatternStr = config.getLogBackupDatePatternStr();
-        String standbyLogFilePathStr = config.getStandbyLogFilePath();
+        String standbyLogFilePathStr = config.getStandbyLogFilePathStr();
         
         String sqlHost = config.getSqlHost();
         String sqlDb = config.getSqlDb();
@@ -98,7 +98,7 @@ public final class MSSQLApplyLog implements Callable<Integer>
 
         Path fullBackupPath = null;
 
-        Path StandbyFile = null;
+        Path standbyFile = null;
         
         // Validate the Log Backup Directory
         if ( StringUtils.isBlank(backupDirStr) )
@@ -311,7 +311,7 @@ public final class MSSQLApplyLog implements Callable<Integer>
                 {
                     try
                     {
-                        MSSQLHelper.restoreLog(p, sqlProcessUser, sqlDb,StandbyFile, conn);
+                        MSSQLHelper.restoreLog(p, sqlProcessUser, sqlDb,standbyFile, conn);
                     }
                     catch (SQLException ex)
                     {
@@ -358,7 +358,7 @@ public final class MSSQLApplyLog implements Callable<Integer>
                             {
                                 try (Connection conn = MSSQLHelper.getConn(currSQLURL, props))
                                 {
-                                    MSSQLHelper.restoreLog(path, currSQLProcUser, currSQLDb,StandbyFile, conn);
+                                    MSSQLHelper.restoreLog(path, currSQLProcUser, currSQLDb,standbyFile, conn);
                                 }
                                 catch (SQLException ex)
                                 {

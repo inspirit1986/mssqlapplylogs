@@ -44,7 +44,7 @@ public final class MSSQLApplyLogConfig
     private final String sqlPass;
     private final String sqlUrl;
     private final String sqlProcessUser;
-    private final String standbyLogFilePath;
+    private final String standbyLogFilePathStr;
     private final Boolean useLogFileLastMode;
     private final Boolean doFullRestore;
     private final Boolean monitorLogBackupDir;
@@ -130,9 +130,9 @@ public final class MSSQLApplyLogConfig
         return fullBackupPathStr;
     }
 
-    public String getStandbyLogFilePath()
+    public String getStandbyLogFilePathStr()
     {
-        return standbyLogFilePath;
+        return standbyLogFilePathStr;
     }
     
     private MSSQLApplyLogConfig(final String backupDirStr,
@@ -148,7 +148,7 @@ public final class MSSQLApplyLogConfig
                                 final String sqlPass,
                                 final String sqlUrl,
                                 final String sqlProcessUser,
-                                final String standbyLogFilePath,
+                                final String standbyLogFilePathStr,
                                 final Boolean useLogFileLastMode,
                                 final Boolean doFullRestore,
                                 final Boolean monitorLogBackupDir)
@@ -167,7 +167,7 @@ public final class MSSQLApplyLogConfig
         this.sqlPass = sqlPass;
         this.sqlUrl = sqlUrl;
         this.sqlProcessUser = sqlProcessUser;
-        this.standbyLogFilePath = standbyLogFilePath;
+        this.standbyLogFilePathStr = standbyLogFilePathStr;
         this.doFullRestore = doFullRestore;
         this.monitorLogBackupDir = monitorLogBackupDir;
     }
@@ -185,7 +185,7 @@ public final class MSSQLApplyLogConfig
                                 final String sqlPass,
                                 final String sqlUrl,
                                 final String sqlProcessUser,
-                                final String standbyLogFilePath,
+                                final String standbyLogFilePathStr,
                                 final Boolean useLogFileLastMode,
                                 final Boolean doFullRestore,
                                 final Boolean monitorLogBackupDir)
@@ -203,7 +203,7 @@ public final class MSSQLApplyLogConfig
                                 sqlPass,
                                 sqlUrl,
                                 sqlProcessUser,
-                                standbyLogFilePath,
+                                standbyLogFilePathStr,
                                 useLogFileLastMode,
                                 doFullRestore,
                                 monitorLogBackupDir);
