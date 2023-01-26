@@ -45,3 +45,5 @@ This application was created using Java 8 in a very short amount of time.  But i
 
 A lot more testing and features are definitely possible. 
 
+## Build Project
+Run `mvn package`

@@ -110,7 +110,7 @@ public final class MSSQLHelper
 
         String strDevice = logPath.toAbsolutePath().toString();
 
-        String query = String.format("RESTORE LOG %s FROM DISK='%s' WITH NORECOVERY",
+        String query = String.format("RESTORE LOG %s FROM DISK='%s' WITH STANDBY='C:\\applylogs\\backup\\db.stn'",
                 sqlDb, strDevice);
 
         Statement stmt = null;

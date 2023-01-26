@@ -215,7 +215,7 @@ public final class MSSQLApplyLog implements Callable<Integer>
 
                 String strDevice = fullBackupPathStr;
 
-                String query = String.format("RESTORE DATABASE %s FROM DISK='%s' WITH NORECOVERY, REPLACE",
+                String query = String.format("RESTORE DATABASE %s FROM DISK='%s' WITH STANDBY='C:\\applylogs\\backup\\db.stn', REPLACE",
                         sqlDb, strDevice);
 
                 Statement stmt = null;
