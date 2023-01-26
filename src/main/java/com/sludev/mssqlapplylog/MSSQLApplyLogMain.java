@@ -75,6 +75,7 @@ public final class MSSQLApplyLogMain
         String fullBackupPatternStr = "(?:[\\w_-]+?)(\\d+)\\.bak";
         String fullBackupDatePatternStr = "yyyyMMddHHmm";
         String sqlProcessUser = null;
+        String standbyLogFilePath = null;
         String logBackupPatternStr = "(.*)\\.trn";
         String logBackupDatePatternStr = "yyyyMMddHHmmss";
 
@@ -253,6 +254,7 @@ public final class MSSQLApplyLogMain
                                 sqlPass,
                                 sqlURL,
                                 sqlProcessUser,
+                                standbyLogFilePath,
                                 useLogFileLastMode,
                                 doFullRestore,
                                 monitorLogBackupDir);

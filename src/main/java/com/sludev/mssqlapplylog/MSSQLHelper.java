@@ -82,12 +82,15 @@ public final class MSSQLHelper
      * @param sqlProcessUser Optionally, give this user file-system permissions.  So SQL Server can RESTORE.
      * @param sqlDb The name of the database to restore.
      * @param conn  Open connection
+     * @param standbyLog Path to standby Log file
      * @throws SQLException 
      */
     public static void restoreLog(final Path logPath, 
                                     final String sqlProcessUser,
                                     final String sqlDb,
+                                    final Path standbyLog,
                                     final Connection conn) throws SQLException
+                                    
     {
         LOGGER.info(String.format("\nStarting Log restore of '%s'...", logPath));
         
@@ -110,8 +113,10 @@ public final class MSSQLHelper
 
         String strDevice = logPath.toAbsolutePath().toString();
 
-        String query = String.format("RESTORE LOG %s FROM DISK='%s' WITH STANDBY='C:\\applylogs\\backup\\db.stn'",
-                sqlDb, strDevice);
+        String strStandbyLog = standbyLog.toAbsolutePath().toString();
+
+        String query = String.format("RESTORE LOG %s FROM DISK='%s' WITH STANDBY='%s'",
+                sqlDb, strDevice, strStandbyLog);
 
         Statement stmt = null;
 

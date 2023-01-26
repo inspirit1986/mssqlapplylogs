@@ -80,6 +80,7 @@ public final class MSSQLApplyLog implements Callable<Integer>
         String fullBackupPatternStr = config.getFullBackupPatternStr();
         String logBackupPatternStr = config.getLogBackupPatternStr();
         String logBackupDatePatternStr = config.getLogBackupDatePatternStr();
+        String standbyLogFilePathStr = config.getStandbyLogFilePath();
         
         String sqlHost = config.getSqlHost();
         String sqlDb = config.getSqlDb();
@@ -96,6 +97,8 @@ public final class MSSQLApplyLog implements Callable<Integer>
         Instant laterThan = null;
 
         Path fullBackupPath = null;
+
+        Path StandbyFile = null;
         
         // Validate the Log Backup Directory
         if ( StringUtils.isBlank(backupDirStr) )
@@ -116,6 +119,14 @@ public final class MSSQLApplyLog implements Callable<Integer>
 
             return 1;
         }
+
+        if ( StringUtils.isBlank(standbyLogFilePathStr) )
+        {
+            LOGGER.error("Invalid blank/empty standby File Path");
+
+            return 1;
+        }
+
 
         if ( Files.notExists(backupsDir))
         {
@@ -214,9 +225,10 @@ public final class MSSQLApplyLog implements Callable<Integer>
                 sw.start();
 
                 String strDevice = fullBackupPathStr;
+                String strStandbyLog = standbyLogFilePathStr;
 
-                String query = String.format("RESTORE DATABASE %s FROM DISK='%s' WITH STANDBY='C:\\applylogs\\backup\\db.stn', REPLACE",
-                        sqlDb, strDevice);
+                String query = String.format("RESTORE DATABASE %s FROM DISK='%s' WITH STANDBY='%s', REPLACE",
+                        sqlDb, strDevice,strStandbyLog);
 
                 Statement stmt = null;
 
@@ -299,7 +311,7 @@ public final class MSSQLApplyLog implements Callable<Integer>
                 {
                     try
                     {
-                        MSSQLHelper.restoreLog(p, sqlProcessUser, sqlDb, conn);
+                        MSSQLHelper.restoreLog(p, sqlProcessUser, sqlDb,StandbyFile, conn);
                     }
                     catch (SQLException ex)
                     {
@@ -346,7 +358,7 @@ public final class MSSQLApplyLog implements Callable<Integer>
                             {
                                 try (Connection conn = MSSQLHelper.getConn(currSQLURL, props))
                                 {
-                                    MSSQLHelper.restoreLog(path, currSQLProcUser, currSQLDb, conn);
+                                    MSSQLHelper.restoreLog(path, currSQLProcUser, currSQLDb,StandbyFile, conn);
                                 }
                                 catch (SQLException ex)
                                 {
