@@ -81,6 +81,7 @@ public final class MSSQLApplyLog implements Callable<Integer>
         String logBackupPatternStr = config.getLogBackupPatternStr();
         String logBackupDatePatternStr = config.getLogBackupDatePatternStr();
         String standbyLogFilePathStr = config.getStandbyLogFilePathStr();
+        String winBackupDirStr = config.getWinBackupDirStr();
         
         String sqlHost = config.getSqlHost();
         String sqlDb = config.getSqlDb();
@@ -97,6 +98,14 @@ public final class MSSQLApplyLog implements Callable<Integer>
         Instant laterThan = null;
 
         Path fullBackupPath = null;
+        
+         // Validate the Win Log Backup Directory
+         if ( StringUtils.isBlank(winBackupDirStr) )
+         {
+             LOGGER.error("Invalid blank/empty Win backup directory");
+ 
+             return 1;
+         }
         
         // Validate the Log Backup Directory
         if ( StringUtils.isBlank(backupDirStr) )
@@ -222,11 +231,12 @@ public final class MSSQLApplyLog implements Callable<Integer>
 
                 sw.start();
 
-                String strDevice = fullBackupPathStr;
                 String strStandbyLog = standbyLogFilePathStr;
+                String strWinFullBackupFile = Paths.get(winBackupDirStr,fullBackupPath.getFileName().toString()).toString();
+
 
                 String query = String.format("RESTORE DATABASE %s FROM DISK='%s' WITH STANDBY='%s', REPLACE",
-                        sqlDb, strDevice,strStandbyLog);
+                        sqlDb, strWinFullBackupFile, strStandbyLog);
 
                 Statement stmt = null;
 

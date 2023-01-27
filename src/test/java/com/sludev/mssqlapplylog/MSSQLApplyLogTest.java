@@ -88,6 +88,8 @@ public class MSSQLApplyLogTest
         final String fullBackupPatternStr = null;
         final String logBackupPatternStr = null;
         final String logBackupDatePatternStr = null;
+        final String standbyLogFilePathStr = null;
+        final String winBackupDirStr = null;
         final String sqlHost = null;
         final String sqlDb = null;
         final String sqlUser = null;
@@ -105,6 +107,8 @@ public class MSSQLApplyLogTest
                                 fullBackupPatternStr,
                                 logBackupPatternStr,
                                 logBackupDatePatternStr,
+                                standbyLogFilePathStr,
+                                winBackupDirStr,
                                 sqlHost,
                                 sqlDb,
                                 sqlUser,
@@ -139,6 +143,8 @@ public class MSSQLApplyLogTest
         final String fullBackupPatternStr = m_testProperties.getProperty("fullBackupPattern");
         final String logBackupPatternStr = m_testProperties.getProperty("logBackupPattern");
         final String logBackupDatePatternStr = m_testProperties.getProperty("logBackupDatePattern");
+        final String standbyLogFilePathStr = m_testProperties.getProperty("standbyLogFilePath");
+        final String winBackupDirStr = m_testProperties.getProperty("winBackupDir");
         final String sqlHost = m_testProperties.getProperty("sqlHost");
         final String sqlDb = m_testProperties.getProperty("sqlDb");
         final String sqlUser = m_testProperties.getProperty("sqlUser");
@@ -156,6 +162,8 @@ public class MSSQLApplyLogTest
                                 fullBackupPatternStr,
                                 logBackupPatternStr,
                                 logBackupDatePatternStr,
+                                standbyLogFilePathStr,
+                                winBackupDirStr,
                                 sqlHost,
                                 sqlDb,
                                 sqlUser,
