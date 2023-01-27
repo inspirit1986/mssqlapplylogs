@@ -313,14 +313,13 @@ public final class MSSQLApplyLog implements Callable<Integer>
             LOGGER.debug(msg.toString());
 
             // Restore all log files
-            String strStandbyLog = standbyLogFilePathStr;
             try (Connection conn = MSSQLHelper.getConn(sqlURL, props))
             {
                 for (Path p : files)
                 {
                     try
                     {
-                        MSSQLHelper.restoreLog(p, sqlProcessUser, sqlDb,strStandbyLog, conn);
+                        MSSQLHelper.restoreLog(p, sqlProcessUser, sqlDb,winBackupDirStr,standbyLogFilePathStr, conn);
                     }
                     catch (SQLException ex)
                     {
@@ -347,7 +346,8 @@ public final class MSSQLApplyLog implements Callable<Integer>
             final String currSQLProcUser = sqlProcessUser;
             final String currSQLURL = sqlURL;
             final String currLogBackupPatternStr = logBackupPatternStr;
-            final String strStandbyLog = standbyLogFilePathStr;
+            final String currWinBackupDirStr = winBackupDirStr;
+            final String currStandbyLogStr = standbyLogFilePathStr;
             
             try
             {
@@ -368,7 +368,7 @@ public final class MSSQLApplyLog implements Callable<Integer>
                             {
                                 try (Connection conn = MSSQLHelper.getConn(currSQLURL, props))
                                 {
-                                    MSSQLHelper.restoreLog(path, currSQLProcUser, currSQLDb,strStandbyLog, conn);
+                                    MSSQLHelper.restoreLog(path, currSQLProcUser, currSQLDb, currWinBackupDirStr, currStandbyLogStr, conn);
                                 }
                                 catch (SQLException ex)
                                 {
