@@ -95,12 +95,9 @@ public final class MSSQLHelper
                                     final Connection conn) throws SQLException
                                     
     {
-        LOGGER.info(String.format("\nStarting Log restore of '%s'...", logPath));
-        
         StopWatch sw = new StopWatch();
-
-        sw.start();
-
+ 
+        
         if (StringUtils.isNoneBlank(sqlProcessUser))
         {
             try
@@ -114,6 +111,29 @@ public final class MSSQLHelper
             }
         }
 
+        Statement stmt = null;
+        stmt = conn.createStatement();
+
+        LOGGER.info(String.format("Go DB to Single User"));
+
+        String SingleUserQstart = String.format("ALTER DATABASE %s SET SINGLE_USER WITH ROLLBACK IMMEDIATE",
+                sqlDb);
+
+        try
+        {
+            boolean sqlRes = stmt.execute(SingleUserQstart);
+        }
+        catch (SQLException ex)
+        {
+        LOGGER.error(String.format("Error executing...\n'%s'", SingleUserQstart), ex);
+                    
+            throw ex;
+        }
+
+        sw.start();
+        
+        LOGGER.info(String.format("\nStarting Log restore of '%s'...", logPath));
+
         String strFileName = logPath.getFileName().toString();
 
         String strWinFullBackupFile = Paths.get(winBackupDir,strFileName).toString();
@@ -122,10 +142,6 @@ public final class MSSQLHelper
 
         String query = String.format("RESTORE LOG %s FROM DISK='%s' WITH STANDBY='%s'",
                 sqlDb, strWinFullBackupFile, strStandbyLog);
-
-        Statement stmt = null;
-
-        stmt = conn.createStatement();
 
         try
         {
@@ -142,5 +158,21 @@ public final class MSSQLHelper
 
         LOGGER.debug(String.format("Query...\n'%s'\nTook %s",
                 query, sw.toString()));
+
+
+        LOGGER.info(String.format("Go DB to Multi User"));
+        String MultiUserQstart = String.format("ALTER DATABASE %s SET MULTI_USER WITH ROLLBACK IMMEDIATE",
+                sqlDb);
+
+        try
+        {
+            boolean sqlRes = stmt.execute(MultiUserQstart);
+        }
+        catch (SQLException ex)
+        {
+            LOGGER.error(String.format("Error executing...\n'%s'", MultiUserQstart), ex);
+            
+            throw ex;
+        }
     }
 }
